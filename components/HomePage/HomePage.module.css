@@ -1,0 +1,47 @@
+.container {
+  max-width: 300px;
+  margin: 20px auto 0 auto;
+  padding: 20px;
+  background-color: #eee;
+  border-radius: 3px;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form button,
+.form input {
+  padding: 5px;
+}
+
+.form button {
+  cursor: pointer;
+}
+
+.status {
+  text-align: center;
+}
+
+.words {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.words li {
+  padding: 5px;
+  border-radius: 3px;
+  color: #fff;
+  background-color: var(--primary-color);
+  transition: all 0.3s;
+}
+
+.words li:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
