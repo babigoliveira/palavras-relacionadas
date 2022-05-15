@@ -1,22 +1,22 @@
 const url = require("url");
-const puppeteer = require("puppeteer");
+const axios = require("axios");
+const cheerio = require("cheerio");
 
 const findRelatedWords = async (word) => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto("https://dicionariocriativo.com.br/" + word);
+  const url = "https://dicionariocriativo.com.br/" + word;
+  const response = await axios.get(url);
+  const html = response.data;
+  const $ = cheerio.load(html);
 
-  const relatedWords = await page.evaluate((word) => {
-    const relatedWordsLinks = document.querySelectorAll(
-      ".resumoBoxContent .tags a"
-    );
+  const relatedWords = [];
 
-    return Array.from(relatedWordsLinks)
-      .map((el) => el.innerHTML)
-      .filter((relatedWord) => relatedWord !== word);
-  }, word);
+  $(".resumoBoxContent .tags a").each((_idx, el) => {
+    const relatedWord = $(el).text();
+    if (relatedWord !== word) {
+      relatedWords.push(relatedWord);
+    }
+  });
 
-  await browser.close();
   return relatedWords;
 };
 
