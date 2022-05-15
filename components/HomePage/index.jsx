@@ -5,6 +5,7 @@ import axios from "axios";
 const HomePage = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchCount, setSearchCount] = useState(0);
   const [relatedWords, setRelatedWords] = useState([]);
 
   const handleFormSubmit = (event) => {
@@ -14,11 +15,17 @@ const HomePage = () => {
 
   const findRelatedWords = (word) => {
     setLoading(true);
+    setSearchCount(searchCount + 1);
 
     axios
       .get("/api/find-related-words", { params: { q: word } })
       .then((response) => setRelatedWords(response.data))
       .finally(() => setLoading(false));
+  };
+
+  const handleWordClick = (relatedWord) => {
+    setSearch(relatedWord);
+    findRelatedWords(relatedWord);
   };
 
   return (
@@ -37,10 +44,14 @@ const HomePage = () => {
 
       {loading && <p className={styles.status}>Aguarde um momento...</p>}
 
+      {!loading && relatedWords.length === 0 && searchCount > 0 && (
+        <p className={styles.status}>Nenhuma palavra relacionada encontrada</p>
+      )}
+
       {!loading && (
         <ul className={styles.words}>
           {relatedWords.map((relatedWord) => (
-            <li key={relatedWord} onClick={() => setSearch(relatedWord)}>
+            <li key={relatedWord} onClick={() => handleWordClick(relatedWord)}>
               {relatedWord}
             </li>
           ))}
