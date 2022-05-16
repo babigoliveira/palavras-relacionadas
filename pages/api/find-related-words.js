@@ -29,9 +29,10 @@ const removeDuplicates = (list) => Array.from(new Set(list));
 const handleHttpRequest = async (req, res) => {
   const queryParams = url.parse(req.url, true).query;
   const word = queryParams["q"];
+  const limit = parseInt(queryParams["limit"]) || Number.MAX_SAFE_INTEGER;
   const relatedWords = await findRelatedWords(word);
   const deduplicatedRelatedWords = removeDuplicates(relatedWords);
-  res.status(200).json(deduplicatedRelatedWords.sort());
+  res.status(200).json(deduplicatedRelatedWords.slice(0, limit).sort());
 };
 
 export default handleHttpRequest;
