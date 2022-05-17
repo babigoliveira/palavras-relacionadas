@@ -67,8 +67,9 @@ const HomePage = () => {
       .then((response) => {
         const relatedWords = response.data;
 
+        setRelatedWords(relatedWords);
+
         if (relatedWords.length) {
-          setRelatedWords(relatedWords);
           updateGraph(word, relatedWords);
         }
       })
@@ -83,7 +84,7 @@ const HomePage = () => {
   const handleNodeClick = (node) => {
     const nodeWord = node.data().name;
     handleWordClick(nodeWord);
-  }
+  };
 
   useEffect(() => {
     graph.fit();
@@ -128,12 +129,19 @@ const HomePage = () => {
     );
   }, [graph]);
 
+  const statusMessage = loading
+    ? "Aguarde um momento..."
+    : relatedWords.length === 0 && searchCount > 0
+    ? "Nenhuma palavra relacionada encontrada"
+    : "";
+
   return (
     <div className={styles.container}>
+      <h1 className={styles.title}>Grafo de palavras</h1>
       <form onSubmit={handleFormSubmit} className={styles.form}>
         <input
           type="text"
-          placeholder="Buscar uma palavra"
+          placeholder="Digite uma palavra"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -143,13 +151,12 @@ const HomePage = () => {
       </form>
 
       <section>
-        {loading && <p className={styles.status}>Aguarde um momento...</p>}
-
-        {!loading && relatedWords.length === 0 && searchCount > 0 && (
-          <p className={styles.status}>
-            Nenhuma palavra relacionada encontrada
-          </p>
-        )}
+        <p
+          className={styles.status}
+          style={{ visibility: statusMessage ? "visible" : "hidden" }}
+        >
+          {statusMessage}
+        </p>
       </section>
 
       <CytoscapeComponent
@@ -158,7 +165,8 @@ const HomePage = () => {
         cy={(cy) => {
           setGraph(cy);
         }}
-        style={{ height: "500px" }}
+        className={styles.graph}
+        style={{ height: "400px" }}
       />
     </div>
   );

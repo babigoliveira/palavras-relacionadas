@@ -1,9 +1,15 @@
 .container {
-  max-width: 300px;
-  margin: 20px auto 0 auto;
+  max-width: max(300px, 60%);
+  margin: 0 auto;
   padding: 20px;
-  background-color: #eee;
-  border-radius: 3px;
+}
+
+.title {
+  text-align: center;
+  margin: 3rem 0;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color);
 }
 
 .form {
@@ -16,14 +22,39 @@
 .form button,
 .form input {
   padding: 5px;
+  outline-color: var(--primary-color);
+  border-radius: 5px;
+  border: var(--primary-color) 2px solid;
+}
+
+.form input::placeholder,
+.form input {
+  color: #555;
+}
+
+.form input:focus {
+  outline-color: var(--primary-color-light);
 }
 
 .form button {
   cursor: pointer;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: var(--primary-color-dark) 2px solid;
+}
+
+.form button:hover {
+  border-color: var(--primary-color-light);
+}
+
+.form button:disabled {
+  cursor: not-allowed;
 }
 
 .status {
   text-align: center;
+  color: #555;
+  min-height: 2rem;
 }
 
 .words {
@@ -44,4 +75,10 @@
 .words li:hover {
   cursor: pointer;
   transform: scale(1.1);
+}
+
+.graph {
+  margin-top: 1rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
 }

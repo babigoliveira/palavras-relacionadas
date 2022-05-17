@@ -1,9 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Imperial+Script&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300;1,400&display=swap");
 
 :root {
-  --primary-color: steelblue;
+  --primary-color: #ffa500;
+  --primary-color-light: #ffd64a;
+  --primary-color-dark: #c67600;
 }
 
-body {
+body,
+input {
   font-family: "Montserrat", sans-serif;
 }
