@@ -12,6 +12,11 @@ const generateEdgeId = (node1Label, node2Label) => {
   return `edge-${[node1Label, node2Label].sort().join("-")}`;
 };
 
+const heatMapColorforValue = (value) => {
+  var h = (1.0 - value) * 240;
+  return "hsl(" + h + ", 100%, 50%)";
+};
+
 const HomePage = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,6 +24,7 @@ const HomePage = () => {
   const [relatedWords, setRelatedWords] = useState([]);
   const [graph, setGraph] = useState(cytoscape());
   const [elements, setElements] = useState([]);
+  const [maxEdges, setMaxEdges] = useState(1);
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -54,6 +60,8 @@ const HomePage = () => {
     if (newEdges.length) {
       setElements((elements) => [...elements, ...newNodes, ...newEdges]);
     }
+
+    setMaxEdges((currentMax) => Math.max(currentMax, newEdges.length));
   };
 
   const findRelatedWords = (word) => {
@@ -62,7 +70,7 @@ const HomePage = () => {
 
     axios
       .get("/api/find-related-words", {
-        params: { q: word, limit: 9 },
+        params: { q: word, limit: 15 },
       })
       .then((response) => {
         const relatedWords = response.data;
@@ -87,8 +95,32 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    graph.fit();
-    graph.center();
+    graph.style(
+      cytoscape
+        .stylesheet()
+        .selector("node")
+        .css({
+          content: "data(name)",
+          "text-valign": "center",
+          color: "white",
+          "text-outline-width": 2,
+          "text-outline-color": "#888",
+          "background-color": (node) => {
+            const nodeDegree = node.connectedEdges().size();
+            const nodeColorWeight = nodeDegree / maxEdges;
+            const nodeColor = heatMapColorforValue(nodeColorWeight);
+            return nodeColor;
+          },
+        })
+        .selector(":selected")
+        .css({
+          "background-color": "red",
+          "line-color": "red",
+          "target-arrow-color": "red",
+          "source-arrow-color": "red",
+          "text-outline-color": "red",
+        })
+    );
     graph
       .layout({
         name: "cose",
