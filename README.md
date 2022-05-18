@@ -2,6 +2,8 @@
 
 Este é um projeto de uma aplicação WEB que consiste em construir um grafo de palavras relacionadas baseadas em uma palavra pesquisada pelo usuário. Um grafo é uma estrutura de dados capaz de representar **relacionamentos** entre diversas entidades.
 
+Link da aplicação [https://palavras-relacionadas.vercel.app](https://palavras-relacionadas.vercel.app)
+
 ![GIF exemplificando a utilização da aplicação](./exemplo.gif)
 
 # Tecnologias, frameworks e bibliotecas utilizadas
